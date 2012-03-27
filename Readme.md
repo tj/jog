@@ -51,6 +51,7 @@ $ jog --file /var/log/videos.log --select "_.user == 'tobi'" --map _.duration
   
     - `add(obj)` to add a log object
     - `stream() => EventEmitter` to stream data
+    - `stream({ end: false }) => EventEmitter` to stream data indefinitely
     - `clear(fn)` to clear the logs
 
 ### FileStore(path)
