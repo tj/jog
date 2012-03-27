@@ -3,6 +3,22 @@
 
   JSON logging & reporting inspired by Loggly.
 
+## jog(1)
+
+```
+  Usage: jog [options]
+
+  Options:
+
+    -h, --help         output usage information
+    -V, --version      output the version number
+    -q, --query <str>  query with the given string
+    -F, --file <path>  load from the given <path>
+    -R, --redis        load from redis store
+    -s, --select <fn>  use the given <fn> for filtering
+    -m, --map <fn>     use the given <fn> for mapping
+```
+
 ## License 
 
 (The MIT License)
