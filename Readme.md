@@ -12,11 +12,36 @@
 
     -h, --help         output usage information
     -V, --version      output the version number
-    -q, --query <str>  query with the given string
     -F, --file <path>  load from the given <path>
     -R, --redis        load from redis store
     -s, --select <fn>  use the given <fn> for filtering
     -m, --map <fn>     use the given <fn> for mapping
+```
+
+### Examples
+
+  View all logs from tobi:
+
+```
+jog --file /tmp/jog --select "_.user == 'tobi'"
+[ { user: 'tobi',
+    duration: 1000,
+    level: 'info',
+    msg: 'rendering video',
+    timestamp: 1332861272100 },
+  { user: 'tobi',
+    duration: 2000,
+    level: 'info',
+    msg: 'compiling video',
+    timestamp: 1332861272100 },
+...
+```
+
+  Filter video compilation durations from "tobi" only:
+  
+```
+$ jog --file /var/log/videos.log --select "_.user == 'tobi'" --map _.duration
+[ 1000, 2000, 1200, 1000, 2000, 1200 ]
 ```
 
 ## License 
