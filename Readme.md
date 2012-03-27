@@ -44,6 +44,33 @@ $ jog --file /var/log/videos.log --select "_.user == 'tobi'" --map _.duration
 [ 1000, 2000, 1200, 1000, 2000, 1200 ]
 ```
 
+## Stores
+
+  By default Jog ships with the `FileStore` and `RedisStore`, however anything
+  with the following methods implemented will work:
+  
+    - `add(obj)` to add a log object
+    - `stream() => EventEmitter` to stream data
+    - `clear(fn)` to clear the logs
+
+### FileStore(path)
+
+  Store logs on disk.
+
+```js
+var jog = require('jog');
+var log = jog(new jog.FileStore('/var/log/videos.log'));
+```
+
+### RedisStore([client])
+
+  Store logs in redis.
+
+```js
+var jog = require('jog');
+var log = jog(new jog.RedisStore);
+```
+
 ## License 
 
 (The MIT License)
