@@ -1,0 +1,65 @@
+#!/usr/bin/env node
+
+var program = require('commander')
+  , jog = require('..');
+
+program
+  .version(jog.version)
+  .option('-q, --query <str>', 'query with the given string')
+  .option('-F, --file <path>', 'load from the given <path>')
+  .option('-R, --redis', 'load from redis store')
+  .option('-s, --select <fn>', 'use the given <fn> for filtering')
+  .option('-m, --map <fn>', 'use the given <fn> for mapping')
+  .parse(process.argv);
+
+// determine store
+
+var store = program.file
+  ? new jog.FileStore(program.file)
+  : program.redis
+    ? new jog.RedisStore
+    : null;
+
+// no store
+
+if (!store) throw new Error('store required, use --file or --redis');
+
+// setup
+
+var log = jog(store)
+  , stream = log.stream()
+  , results = []
+  , select
+  , map
+  , prop;
+
+// --select
+
+if (program.select) select = new Function('_', 'return ' + program.select);
+
+// --map
+
+if (program.map) map = new Function('_', 'return ' + program.map);
+
+// stream data
+
+stream.on('data', function(line){
+  var ret;
+
+  if (select) {
+    if (select(line)) ret = line;
+  } else {
+    ret = line;
+  }
+
+  if (undefined !== ret) {
+    if (map) ret = map(ret);
+    results.push(ret);
+  }
+});
+
+// output results
+
+stream.on('end', function(){
+  console.log(results);
+});
