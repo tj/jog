@@ -23,6 +23,27 @@ module.exports = function(store){
         done();
       });
     })
+
+    describe('when "end" is false', function(){
+      it('should remain open', function(done){
+        var log = new Jog(store)
+          , stream = log.stream({ end: false, interval: 100 })
+          , n = 0;
+
+        var id = setInterval(function(){
+          log.write('info', 'compiling video', { vid: ++n });
+        }, 2);
+
+        stream.on('data', function(line){
+          if (line.vid == 20) {
+            clearInterval(id);
+            done();
+          }
+        }).on('end', function(){
+          done(new Error('called end'));
+        });
+      })
+    })
   })
 
   describe('#clear(fn)', function(){
