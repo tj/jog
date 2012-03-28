@@ -1,6 +1,7 @@
 
 test:
 	@./node_modules/.bin/mocha \
+		--slow 100 \
 		--timeout 500 \
 		--reporter spec \
 		--require should \
