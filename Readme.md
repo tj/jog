@@ -152,6 +152,13 @@ var jog = require('jog');
 var log = jog(new jog.RedisStore);
 ```
 
+## Running tests
+
+```
+$ npm install
+$ make test
+```
+
 ## License 
 
 (The MIT License)
