@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var program = require('commander')
+  , util = require('util')
   , jog = require('..')
   , select;
 
@@ -20,6 +21,7 @@ program
   .option('-R, --redis', 'load from redis store')
   .option('-s, --select <fn>', 'use the given <fn> for filtering')
   .option('-m, --map <fn>', 'use the given <fn> for mapping')
+  .option('-c, --color', 'color the json output')
   .parse(process.argv);
 
 // determine store
@@ -60,11 +62,16 @@ stream.on('data', function(line){
   for (var i = 0, len = maps.length; i < len; ++i) {
     ret = maps[i](ret);
   }
+
   results.push(ret);
 });
 
 // output results
 
 stream.on('end', function(){
-  console.log(results);
+  if (program.color) {
+    console.log(util.inspect(results, false, 15, true));
+  } else {
+    console.log(results);
+  }
 });

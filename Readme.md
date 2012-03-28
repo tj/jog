@@ -85,6 +85,7 @@ yields:
     -R, --redis        load from redis store
     -s, --select <fn>  use the given <fn> for filtering
     -m, --map <fn>     use the given <fn> for mapping
+    -c, --color        enable colors for json output
 ```
 
 ### Examples
