@@ -7,6 +7,31 @@
 
     $ npm install jog
 
+## API
+
+### log.write(level, msg[, obj])
+
+  Write to the logs:
+
+```js
+log.write(level, msg[, obj])
+log.debug(msg[, obj])
+log.info(msg[, obj])
+log.warn(msg[, obj])
+log.error(msg[, obj])
+```
+
+### log.stream(options)
+
+  Return an `EventEmitter` emitting "data" and "end" events.
+
+   - `end` when __false__ streaming will not end
+   - `interval` the interval at which to poll (store-specific)
+
+### log.clear(callback)
+
+  Clear the logs and invoke the callback.
+
 ## Example
 
   Log random data using the `FileStore` and tail the file
@@ -46,31 +71,6 @@ yields:
   timestamp: 1332907641771 }
 ...
 ```
-
-## API
-
-### log.write(level, msg[, obj])
-
-  Write to the logs:
-
-```js
-log.write(level, msg[, obj])
-log.debug(msg[, obj])
-log.info(msg[, obj])
-log.warn(msg[, obj])
-log.error(msg[, obj])
-```
-
-### log.stream(options)
-
-  Return an `EventEmitter` emitting "data" and "end" events.
-
-   - `end` when __false__ streaming will not end
-   - `interval` the interval at which to poll (store-specific)
-
-### log.clear(callback)
-
-  Clear the logs and invoke the callback.
 
 ## jog(1)
 
