@@ -1,7 +1,18 @@
 #!/usr/bin/env node
 
 var program = require('commander')
-  , jog = require('..');
+  , jog = require('..')
+  , select;
+
+// map functions
+
+var maps = [];
+
+// collect em
+
+program.on('map', function(val){
+  maps.push(new Function('_', 'return ' + val));
+});
 
 program
   .version(jog.version)
@@ -23,22 +34,16 @@ var store = program.file
 
 if (!store) throw new Error('store required, use --file or --redis');
 
+// --select
+
+if (program.select) select = new Function('_', 'return ' + program.select);
+
 // setup
 
 var log = jog(store)
   , stream = log.stream()
   , results = []
-  , select
-  , map
   , prop;
-
-// --select
-
-if (program.select) select = new Function('_', 'return ' + program.select);
-
-// --map
-
-if (program.map) map = new Function('_', 'return ' + program.map);
 
 // stream data
 
@@ -51,10 +56,11 @@ stream.on('data', function(line){
     ret = line;
   }
 
-  if (undefined !== ret) {
-    if (map) ret = map(ret);
-    results.push(ret);
+  if (undefined === ret) return;
+  for (var i = 0, len = maps.length; i < len; ++i) {
+    ret = maps[i](ret);
   }
+  results.push(ret);
 });
 
 // output results

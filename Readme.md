@@ -88,7 +88,9 @@ log.error(msg[, obj])
 
 ### Examples
 
-  View all logs from tobi:
+  View all logs from tobi. The `_` object for the function
+  bodies of `--select` and `--map` represents the current
+  document, it's all just javascript.
 
 ```
 jog --file /tmp/jog --select "_.user == 'tobi'"
@@ -110,6 +112,16 @@ jog --file /tmp/jog --select "_.user == 'tobi'"
 ```
 $ jog --file /var/log/videos.log --select "_.user == 'tobi'" --map _.duration
 [ 1000, 2000, 1200, 1000, 2000, 1200 ]
+```
+
+  The --map flag can be used several times:
+
+```
+jog --file /var/log/videos.log --select "_.vid < 5" --map _.msg --map "_.split(' ')"
+[ [ 'compiling', 'video' ],
+  [ 'compiling', 'video' ],
+  [ 'compiling', 'video' ],
+  [ 'compiling', 'video' ] ]
 ```
 
 ## Stores
