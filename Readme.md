@@ -39,7 +39,7 @@ log.error(msg[, obj])
   to produce more and more specific loggers.
 
 ```js
-var log = jog(new jog.FileStore('/tmp/log));
+var log = jog(new jog.FileStore('/tmp/log'));
 
 // log a user 5
 log = log.ns({ uid: 5 });
