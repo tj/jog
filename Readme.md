@@ -3,6 +3,74 @@
 
   JSON logging & reporting inspired by Loggly.
 
+## Installation
+
+    $ npm install jog
+
+## Example
+
+  Log random data using the `FileStore` and tail the file
+  for changes (typically in different processes).
+
+```js
+var jog = require('jog')
+  , log = jog(new jog.FileStore('/tmp/tail'))
+  , id = 0;
+
+// generate random log data
+function again() {
+  log.info('something happened', { id: ++id, user: 'Tobi' });
+  setTimeout(again, Math.random() * 100 | 0);
+}
+
+again();
+
+// tail the json "documents"
+log.stream({ end: false, interval: 500 })
+  .on('data', function(obj){
+    console.log(obj);
+  });
+```
+
+yields:
+
+```js
+{ id: 1,
+  level: 'info',
+  msg: 'something happened',
+  timestamp: 1332907641734 }
+{ id: 2,
+  level: 'info',
+  msg: 'something happened',
+  timestamp: 1332907641771 }
+...
+```
+
+## API
+
+### log.write(level, msg[, obj])
+
+  Write to the logs:
+
+```js
+log.write(level, msg[, obj])
+log.debug(msg[, obj])
+log.info(msg[, obj])
+log.warn(msg[, obj])
+log.error(msg[, obj])
+```
+
+### log.stream(options)
+
+  Return an `EventEmitter` emitting "data" and "end" events.
+
+   - `end` when __false__ streaming will not end
+   - `interval` the interval at which to poll (store-specific)
+
+### log.clear(callback)
+
+  Clear the logs and invoke the callback.
+
 ## jog(1)
 
 ```

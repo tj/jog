@@ -4,7 +4,7 @@ var Jog = require('..')
   , id = 0;
 
 function again() {
-  log.info('something happend', { id: ++id });
+  log.info('something happened', { id: ++id });
   setTimeout(again, Math.random() * 100 | 0);
 }
 
