@@ -10,7 +10,8 @@
 ## Example
 
   Log random data using the `FileStore` and tail the file
-  for changes (typically in different processes).
+  for changes (typically in different processes). Jog will add
+  the `.level` and `.msg` properties for you.
 
 ```js
 var jog = require('jog')
