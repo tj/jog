@@ -184,6 +184,12 @@ var jog = require('jog');
 var log = jog(new jog.RedisStore);
 ```
 
+## Performance
+
+  No profiling or optimizations yet but the `FileStore` can
+  stream back 256,832 documents (~21MB) in 1.2 seconds on my
+  macbook air.
+
 ## Running tests
 
 ```
