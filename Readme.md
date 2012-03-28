@@ -197,6 +197,7 @@ var log = jog(new jog.RedisStore);
 
 ```
 $ npm install
+$ redis-server &
 $ make test
 ```
 
