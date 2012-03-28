@@ -21,6 +21,25 @@ log.warn(msg[, obj])
 log.error(msg[, obj])
 ```
 
+### log.ns(obj)
+
+  Namespace with the given `obj`, returning a new `Jog` instance
+  inheriting previous properties. You may call this several times
+  to produce more and more specific loggers.
+
+```js
+var log = jog(new jog.FileStore('/tmp/log));
+
+// log a user 5
+log = log.ns({ uid: 5 });
+
+// log video id 99 for user 5
+log = log.ns({ vid: 99 });
+
+// or both at once
+log = log.ns({ uid: 5, vid: 99 });
+```
+
 ### log.stream(options)
 
   Return an `EventEmitter` emitting "data" and "end" events.
