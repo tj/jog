@@ -7,6 +7,17 @@
 
     $ npm install jog
 
+## Features
+
+  - namespace support
+  - rich json documents
+  - log levels
+  - file store
+  - redis store
+  - document streaming
+  - tail -f like streaming
+  - CLI to tail and map / reduce logs
+
 ## API
 
 ### log.write(level, msg[, obj])
