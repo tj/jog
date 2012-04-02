@@ -1,0 +1,247 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Jog by visionmedia</title>
+    
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Jog</h1>
+        <p>JSON document logging &amp; reporting inspired by loggly for node.js</p>
+        <p class="view"><a href="https://github.com/visionmedia/jog">View the Project on GitHub <small>visionmedia/jog</small></a></p>
+        <ul>
+          <li><a href="https://github.com/visionmedia/jog/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/visionmedia/jog/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/visionmedia/jog">Fork On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>JSON logging &amp; reporting inspired by Loggly for node.js.</p>
+
+<h2>Installation</h2>
+
+<pre><code>$ npm install jog
+</code></pre>
+
+<h2>Features</h2>
+
+<ul>
+<li>namespace support</li>
+<li>rich json documents</li>
+<li>log levels</li>
+<li>file store</li>
+<li>redis store</li>
+<li>document streaming</li>
+<li>tail -f like streaming</li>
+<li>CLI to tail and map / reduce logs</li>
+</ul><h2>API</h2>
+
+<h3>log.write(level, msg[, obj])</h3>
+
+<p>Write to the logs:</p>
+
+<div class="highlight">
+<pre><span class="nx">log</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">level</span><span class="p">,</span> <span class="nx">msg</span><span class="p">[,</span> <span class="nx">obj</span><span class="p">])</span>
+<span class="nx">log</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="nx">msg</span><span class="p">[,</span> <span class="nx">obj</span><span class="p">])</span>
+<span class="nx">log</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">msg</span><span class="p">[,</span> <span class="nx">obj</span><span class="p">])</span>
+<span class="nx">log</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="nx">msg</span><span class="p">[,</span> <span class="nx">obj</span><span class="p">])</span>
+<span class="nx">log</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">msg</span><span class="p">[,</span> <span class="nx">obj</span><span class="p">])</span>
+</pre>
+</div>
+
+
+<h3>log.ns(obj)</h3>
+
+<p>Namespace with the given <code>obj</code>, returning a new <code>Jog</code> instance
+  inheriting previous properties. You may call this several times
+  to produce more and more specific loggers.</p>
+
+<div class="highlight">
+<pre><span class="kd">var</span> <span class="nx">log</span> <span class="o">=</span> <span class="nx">jog</span><span class="p">(</span><span class="k">new</span> <span class="nx">jog</span><span class="p">.</span><span class="nx">FileStore</span><span class="p">(</span><span class="s1">'/tmp/log'</span><span class="p">));</span>
+
+<span class="c1">// log a user 5</span>
+<span class="nx">log</span> <span class="o">=</span> <span class="nx">log</span><span class="p">.</span><span class="nx">ns</span><span class="p">({</span> <span class="nx">uid</span><span class="o">:</span> <span class="mi">5</span> <span class="p">});</span>
+
+<span class="c1">// log video id 99 for user 5</span>
+<span class="nx">log</span> <span class="o">=</span> <span class="nx">log</span><span class="p">.</span><span class="nx">ns</span><span class="p">({</span> <span class="nx">vid</span><span class="o">:</span> <span class="mi">99</span> <span class="p">});</span>
+
+<span class="c1">// or both at once</span>
+<span class="nx">log</span> <span class="o">=</span> <span class="nx">log</span><span class="p">.</span><span class="nx">ns</span><span class="p">({</span> <span class="nx">uid</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span> <span class="nx">vid</span><span class="o">:</span> <span class="mi">99</span> <span class="p">});</span>
+</pre>
+</div>
+
+
+<h3>log.stream(options)</h3>
+
+<p>Return an <code>EventEmitter</code> emitting "data" and "end" events.</p>
+
+<ul>
+<li>
+<code>end</code> when <strong>false</strong> streaming will not end</li>
+<li>
+<code>interval</code> the interval at which to poll (store-specific)</li>
+</ul><h3>log.clear(callback)</h3>
+
+<p>Clear the logs and invoke the callback.</p>
+
+<h2>Example</h2>
+
+<p>Log random data using the <code>FileStore</code> and tail the file
+  for changes (typically in different processes). Jog will add
+  the <code>.level</code> and <code>.msg</code> properties for you.</p>
+
+<div class="highlight">
+<pre><span class="kd">var</span> <span class="nx">jog</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'jog'</span><span class="p">)</span>
+  <span class="p">,</span> <span class="nx">log</span> <span class="o">=</span> <span class="nx">jog</span><span class="p">(</span><span class="k">new</span> <span class="nx">jog</span><span class="p">.</span><span class="nx">FileStore</span><span class="p">(</span><span class="s1">'/tmp/tail'</span><span class="p">))</span>
+  <span class="p">,</span> <span class="nx">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// generate random log data</span>
+<span class="kd">function</span> <span class="nx">again</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">log</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">'something happened'</span><span class="p">,</span> <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="o">++</span><span class="nx">id</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="s1">'Tobi'</span> <span class="p">});</span>
+  <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">again</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">|</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">again</span><span class="p">();</span>
+
+<span class="c1">// tail the json "documents"</span>
+<span class="nx">log</span><span class="p">.</span><span class="nx">stream</span><span class="p">({</span> <span class="nx">end</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">interval</span><span class="o">:</span> <span class="mi">500</span> <span class="p">})</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+  <span class="p">});</span>
+</pre>
+</div>
+
+
+<p>yields:</p>
+
+<div class="highlight">
+<pre><span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="nx">level</span><span class="o">:</span> <span class="s1">'info'</span><span class="p">,</span>
+  <span class="nx">msg</span><span class="o">:</span> <span class="s1">'something happened'</span><span class="p">,</span>
+  <span class="nx">timestamp</span><span class="o">:</span> <span class="mi">1332907641734</span> <span class="p">}</span>
+<span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="nx">level</span><span class="o">:</span> <span class="s1">'info'</span><span class="p">,</span>
+  <span class="nx">msg</span><span class="o">:</span> <span class="s1">'something happened'</span><span class="p">,</span>
+  <span class="nx">timestamp</span><span class="o">:</span> <span class="mi">1332907641771</span> <span class="p">}</span>
+<span class="p">...</span>
+</pre>
+</div>
+
+
+<h2>jog(1)</h2>
+
+<pre><code>  Usage: jog [options]
+
+  Options:
+
+    -h, --help         output usage information
+    -V, --version      output the version number
+    -F, --file &lt;path&gt;  load from the given &lt;path&gt;
+    -R, --redis        load from redis store
+    -s, --select &lt;fn&gt;  use the given &lt;fn&gt; for filtering
+    -m, --map &lt;fn&gt;     use the given &lt;fn&gt; for mapping
+    -c, --color        enable colors for json output
+</code></pre>
+
+<h3>Examples</h3>
+
+<p>View all logs from tobi. The <code>_</code> object for the function
+  bodies of <code>--select</code> and <code>--map</code> represents the current
+  document, it's all just javascript.</p>
+
+<pre><code>jog --file /tmp/jog --select "_.user == 'tobi'"
+[ { user: 'tobi',
+    duration: 1000,
+    level: 'info',
+    msg: 'rendering video',
+    timestamp: 1332861272100 },
+  { user: 'tobi',
+    duration: 2000,
+    level: 'info',
+    msg: 'compiling video',
+    timestamp: 1332861272100 },
+...
+</code></pre>
+
+<p>Filter video compilation durations from "tobi" only:</p>
+
+<pre><code>$ jog --file /var/log/videos.log --select "_.user == 'tobi'" --map _.duration
+[ 1000, 2000, 1200, 1000, 2000, 1200 ]
+</code></pre>
+
+<p>The --map flag can be used several times:</p>
+
+<pre><code>jog --file /var/log/videos.log --select "_.vid &lt; 5" --map _.msg --map "_.split(' ')"
+[ [ 'compiling', 'video' ],
+  [ 'compiling', 'video' ],
+  [ 'compiling', 'video' ],
+  [ 'compiling', 'video' ] ]
+</code></pre>
+
+<h2>Stores</h2>
+
+<p>By default Jog ships with the <code>FileStore</code> and <code>RedisStore</code>, however anything
+  with the following methods implemented will work:</p>
+
+<pre><code>- `add(obj)` to add a log object
+- `stream() =&gt; EventEmitter` to stream data
+- `stream({ end: false }) =&gt; EventEmitter` to stream data indefinitely
+- `clear(fn)` to clear the logs
+</code></pre>
+
+<h3>FileStore(path)</h3>
+
+<p>Store logs on disk.</p>
+
+<div class="highlight">
+<pre><span class="kd">var</span> <span class="nx">jog</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'jog'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">log</span> <span class="o">=</span> <span class="nx">jog</span><span class="p">(</span><span class="k">new</span> <span class="nx">jog</span><span class="p">.</span><span class="nx">FileStore</span><span class="p">(</span><span class="s1">'/var/log/videos.log'</span><span class="p">));</span>
+</pre>
+</div>
+
+
+<h3>RedisStore([client])</h3>
+
+<p>Store logs in redis.</p>
+
+<div class="highlight">
+<pre><span class="kd">var</span> <span class="nx">jog</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'jog'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">log</span> <span class="o">=</span> <span class="nx">jog</span><span class="p">(</span><span class="k">new</span> <span class="nx">jog</span><span class="p">.</span><span class="nx">RedisStore</span><span class="p">);</span>
+</pre>
+</div>
+
+
+<h2>Performance</h2>
+
+<p>No profiling or optimizations yet but the <code>FileStore</code> can
+  stream back 250,000 documents (~21MB) in 1.2 seconds on my
+  macbook air.</p>
+
+<p>The <code>RedisStore</code> with 250,000 documents streamed back
+  in 2.8 seconds on my air.</p>
+
+<h2>Running tests</h2>
+
+<pre><code>$ npm install
+$ redis-server &amp;
+$ make test
+</code></pre>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/visionmedia">visionmedia</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>
