@@ -4,6 +4,7 @@
   , "description": "JSON logging & reporting"
   , "keywords": ["json", "log", "loggly"]
   , "author": "TJ Holowaychuk <tj@learnboost.com>"
+  , "repository": { "type": "git", "url": "git://github.com/visionmedia/jog.git" }
   , "bin": { "jog": "./bin/jog" }
   , "dependencies": { "debug": "*", "redis": "0.7.1", "commander": "0.5.2" }
   , "devDependencies": { "mocha": "*", "should": "*", "JSONSelect": "*", "canvas": "*" }
