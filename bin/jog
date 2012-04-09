@@ -17,6 +17,7 @@ program.on('map', function(val){
 
 program
   .version(jog.version)
+  .option('-f, --ignore-eof', 'do not stop on EOF')
   .option('-F, --file <path>', 'load from the given <path>')
   .option('-R, --redis', 'load from redis store')
   .option('-s, --select <fn>', 'use the given <fn> for filtering')
@@ -40,10 +41,14 @@ if (!store) throw new Error('store required, use --file or --redis');
 
 if (program.select) select = new Function('_', 'return ' + program.select);
 
+// -f
+
+var ignoreEOF = program.ignoreEof;
+
 // setup
 
 var log = jog(store)
-  , stream = log.stream()
+  , stream = log.stream({ end: !ignoreEOF })
   , results = []
   , prop;
 
@@ -63,15 +68,27 @@ stream.on('data', function(line){
     ret = maps[i](ret);
   }
 
-  results.push(ret);
+  if (ignoreEOF) {
+    output(ret);
+  } else {
+    results.push(ret);
+  }
 });
 
 // output results
 
 stream.on('end', function(){
-  if (program.color) {
-    console.log(util.inspect(results, false, 15, true));
-  } else {
-    console.log(results);
-  }
+  ignoreEOF || output(results);
 });
+
+/**
+ * Output `obj`.
+ */
+
+function output(obj) {
+  if (program.color) {
+    console.log(util.inspect(obj, false, 15, true));
+  } else {
+    console.log(obj);
+  }
+}

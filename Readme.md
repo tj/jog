@@ -106,16 +106,17 @@ yields:
 
 ```
   Usage: jog [options]
-
+  
   Options:
-
+  
     -h, --help         output usage information
     -V, --version      output the version number
+    -f, --ignore-eof   do not stop on EOF
     -F, --file <path>  load from the given <path>
     -R, --redis        load from redis store
     -s, --select <fn>  use the given <fn> for filtering
     -m, --map <fn>     use the given <fn> for mapping
-    -c, --color        enable colors for json output
+    -c, --color        color the json output
 ```
 
 ### Examples
@@ -154,6 +155,15 @@ jog --file /var/log/videos.log --select "_.vid < 5" --map _.msg --map "_.split('
   [ 'compiling', 'video' ],
   [ 'compiling', 'video' ],
   [ 'compiling', 'video' ] ]
+```
+
+  Tail errors only, with color:
+
+```
+$ jog --file my.log -f -c --select '_.level == "error"'
+{ level: 'error',
+  msg: 'something broke',
+  timestamp: 1333943982669 }
 ```
 
 ## Stores
