@@ -105,18 +105,24 @@ yields:
 ## jog(1)
 
 ```
+
   Usage: jog [options]
   
   Options:
   
-    -h, --help         output usage information
-    -V, --version      output the version number
-    -f, --ignore-eof   do not stop on EOF
-    -F, --file <path>  load from the given <path>
-    -R, --redis        load from redis store
-    -s, --select <fn>  use the given <fn> for filtering
-    -m, --map <fn>     use the given <fn> for mapping
-    -c, --color        color the json output
+    -h, --help          output usage information
+    -V, --version       output the version number
+    -w, --within <ms>   filter events to within the given <ms>
+    -t, --type <name>   filter using the given type <name>
+    -l, --level <name>  filter using the given level <name>
+    -f, --ignore-eof    do not stop on EOF
+    -F, --file <path>   load from the given <path>
+    -R, --redis         load from redis store
+    -s, --select <fn>   use the given <fn> for filtering
+    -m, --map <fn>      use the given <fn> for mapping
+    -c, --color         color the json output
+  
+  
 ```
 
 ### Examples
