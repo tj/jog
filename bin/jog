@@ -9,6 +9,10 @@ var program = require('commander')
 
 var maps = [];
 
+// filter functions
+
+var selects = [];
+
 // collect em
 
 program.on('map', function(val){
@@ -41,15 +45,15 @@ if (!store) throw new Error('store required, use --file or --redis');
 
 // --level
 
-if (program.level) select = new Function('_', 'return _.level == "' + program.level + '"');
+if (program.level) selects.push(new Function('_', 'return _.level == "' + program.level + '"'));
 
 // --type
 
-if (program.type) select = new Function('_', 'return _.msg == "' + program.type + '"');
+if (program.type) selects.push(new Function('_', 'return _.msg == "' + program.type + '"'));
 
 // --select
 
-if (program.select) select = new Function('_', 'return ' + program.select);
+if (program.select) selects.push(Function('_', 'return ' + program.select));
 
 // -f
 
@@ -67,8 +71,14 @@ var log = jog(store)
 stream.on('data', function(line){
   var ret;
 
-  if (select) {
-    if (select(line)) ret = line;
+  if (selects.length) {
+    ret = line;
+    for (var i = 0, len = selects.length; i < len; ++i) {
+      if (!selects[i](line)) {
+        ret = undefined;
+        break;
+      }
+    }
   } else {
     ret = line;
   }
