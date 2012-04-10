@@ -2,6 +2,7 @@
 
 var program = require('commander')
   , util = require('util')
+  , ms = require('ms')
   , jog = require('..')
   , select;
 
@@ -28,7 +29,7 @@ program.on('level', function(val){
 // --type
 
 program.on('type', function(val){
-  selects.push(new Function('_', 'return _.msg == "' + val + '"'));
+  selects.push(new Function('_', 'return _.type == "' + val + '"'));
 });
 
 // --select
