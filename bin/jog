@@ -17,6 +17,8 @@ program.on('map', function(val){
 
 program
   .version(jog.version)
+  .option('-t, --type <name>', 'filter using the given type <name>')
+  .option('-l, --level <name>', 'filter using the given level <name>')
   .option('-f, --ignore-eof', 'do not stop on EOF')
   .option('-F, --file <path>', 'load from the given <path>')
   .option('-R, --redis', 'load from redis store')
@@ -36,6 +38,14 @@ var store = program.file
 // no store
 
 if (!store) throw new Error('store required, use --file or --redis');
+
+// --level
+
+if (program.level) select = new Function('_', 'return _.level == "' + program.level + '"');
+
+// --type
+
+if (program.type) select = new Function('_', 'return _.msg == "' + program.type + '"');
 
 // --select
 
