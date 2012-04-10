@@ -13,10 +13,28 @@ var maps = [];
 
 var selects = [];
 
-// collect em
+// --map
 
 program.on('map', function(val){
   maps.push(new Function('_', 'return ' + val));
+});
+
+// --level
+
+program.on('level', function(val){
+  selects.push(new Function('_', 'return _.level == "' + val + '"'));
+});
+
+// --type
+
+program.on('type', function(val){
+  selects.push(new Function('_', 'return _.msg == "' + val + '"'));
+});
+
+// --select
+
+program.on('select', function(val){
+  selects.push(new Function('_', 'return ' + val));
 });
 
 program
@@ -42,18 +60,6 @@ var store = program.file
 // no store
 
 if (!store) throw new Error('store required, use --file or --redis');
-
-// --level
-
-if (program.level) selects.push(new Function('_', 'return _.level == "' + program.level + '"'));
-
-// --type
-
-if (program.type) selects.push(new Function('_', 'return _.msg == "' + program.type + '"'));
-
-// --select
-
-if (program.select) selects.push(Function('_', 'return ' + program.select));
 
 // -f
 
