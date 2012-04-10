@@ -179,6 +179,14 @@ $ jog -F my.log --level error --select "Date.now() - _.timestamp < 10000" --map 
 [ 'something broke', 'something broke', 'something broke' ]
 ```
 
+  Events within the last 10 minutes, 5 seconds, and 200ms:
+
+```
+$ jog -F my.log --within 10m
+$ jog -F my.log --within 5s
+$ jog -F my.log --within 200
+```
+
 ## Stores
 
   By default Jog ships with the `FileStore` and `RedisStore`, however anything
