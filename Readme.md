@@ -147,7 +147,7 @@ $ jog --file /var/log/videos.log --select "_.user == 'tobi'" --map _.duration
 [ 1000, 2000, 1200, 1000, 2000, 1200 ]
 ```
 
-  The --map flag can be used several times:
+  Flags can be used several times:
 
 ```
 jog --file /var/log/videos.log --select "_.vid < 5" --map _.msg --map "_.split(' ')"
@@ -164,6 +164,13 @@ $ jog --file my.log -f -c --select '_.level == "error"'
 { level: 'error',
   msg: 'something broke',
   timestamp: 1333943982669 }
+```
+
+  Display error messages within the last 10 seconds:
+
+```
+$ jog -F my.log --level error --select "Date.now() - _.timestamp < 10000" --map _.msg
+[ 'something broke', 'something broke', 'something broke' ]
 ```
 
 ## Stores
