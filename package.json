@@ -6,8 +6,18 @@
   , "author": "TJ Holowaychuk <tj@learnboost.com>"
   , "repository": { "type": "git", "url": "git://github.com/visionmedia/jog.git" }
   , "bin": { "jog": "./bin/jog" }
-  , "dependencies": { "debug": "*", "redis": "0.7.1", "commander": "0.5.2" }
-  , "devDependencies": { "mocha": "*", "should": "*", "JSONSelect": "*", "canvas": "*" }
+  , "dependencies": {
+    "debug": "*",
+    "redis": "0.7.1",
+    "commander": "0.5.2",
+    "ms": "0.1.0"
+  }
+  , "devDependencies": {
+    "mocha": "*",
+    "should": "*",
+    "JSONSelect": "*",
+    "canvas": "*"
+  }
   , "main": "index"
   , "engines": { "node": "*" }
 }
