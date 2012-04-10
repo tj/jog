@@ -40,6 +40,7 @@ program.on('select', function(val){
 
 program
   .version(jog.version)
+  .option('-w, --within <ms>', 'filter events to within the given <ms>', ms)
   .option('-t, --type <name>', 'filter using the given type <name>')
   .option('-l, --level <name>', 'filter using the given level <name>')
   .option('-f, --ignore-eof', 'do not stop on EOF')
@@ -65,6 +66,12 @@ if (!store) throw new Error('store required, use --file or --redis');
 // -f
 
 var ignoreEOF = program.ignoreEof;
+
+// --within
+
+if (program.within) {
+  selects.push(new Function('_', 'return Date.now() - _.timestamp <= ' + program.within));
+}
 
 // setup
 
