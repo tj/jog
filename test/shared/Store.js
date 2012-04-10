@@ -18,8 +18,8 @@ module.exports = function(store){
         lines[0].should.have.property('timestamp');
         delete lines[0].timestamp;
         delete lines[1].timestamp;
-        lines[0].should.eql({ vid: 'abc', level: 'info', msg: 'compiling video' });
-        lines[1].should.eql({ vid: 'abc', level: 'info', msg: 'uploading video' });
+        lines[0].should.eql({ vid: 'abc', level: 'info', type: 'compiling video' });
+        lines[1].should.eql({ vid: 'abc', level: 'info', type: 'uploading video' });
         done();
       });
     })

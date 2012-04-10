@@ -20,13 +20,13 @@ describe('Jog', function(){
     })
   })
 
-  describe('#write(level, msg, attrs)', function(){
+  describe('#write(level, type, attrs)', function(){
     it('should .add() to the store', function(done){
       var store = {
         add: function(obj){
           obj.level.should.equal('info');
           obj.timestamp.should.be.a('number');
-          obj.msg.should.equal('something happened');
+          obj.type.should.equal('something happened');
           done();
         }
       };
@@ -44,7 +44,7 @@ describe('Jog', function(){
           obj.uid.should.equal('tobi');
           obj.level.should.equal('info');
           obj.timestamp.should.be.a('number');
-          obj.msg.should.equal('something happened');
+          obj.type.should.equal('something happened');
           done();
         }
       };

@@ -20,16 +20,16 @@
 
 ## API
 
-### log.write(level, msg[, obj])
+### log.write(level, type[, obj])
 
   Write to the logs:
 
 ```js
-log.write(level, msg[, obj])
-log.debug(msg[, obj])
-log.info(msg[, obj])
-log.warn(msg[, obj])
-log.error(msg[, obj])
+log.write(level, type[, obj])
+log.debug(type[, obj])
+log.info(type[, obj])
+log.warn(type[, obj])
+log.error(type[, obj])
 ```
 
 ### log.ns(obj)
@@ -66,7 +66,7 @@ log = log.ns({ uid: 5, vid: 99 });
 
   Log random data using the `FileStore` and tail the file
   for changes (typically in different processes). Jog will add
-  the `.level` and `.msg` properties for you.
+  the `.level` and `.type` properties for you.
 
 ```js
 var jog = require('jog')
@@ -93,11 +93,11 @@ yields:
 ```js
 { id: 1,
   level: 'info',
-  msg: 'something happened',
+  type: 'something happened',
   timestamp: 1332907641734 }
 { id: 2,
   level: 'info',
-  msg: 'something happened',
+  type: 'something happened',
   timestamp: 1332907641771 }
 ...
 ```
@@ -130,12 +130,12 @@ jog --file /tmp/jog --select "_.user == 'tobi'"
 [ { user: 'tobi',
     duration: 1000,
     level: 'info',
-    msg: 'rendering video',
+    type: 'rendering video',
     timestamp: 1332861272100 },
   { user: 'tobi',
     duration: 2000,
     level: 'info',
-    msg: 'compiling video',
+    type: 'compiling video',
     timestamp: 1332861272100 },
 ...
 ```
@@ -150,7 +150,7 @@ $ jog --file /var/log/videos.log --select "_.user == 'tobi'" --map _.duration
   Flags can be used several times:
 
 ```
-jog --file /var/log/videos.log --select "_.vid < 5" --map _.msg --map "_.split(' ')"
+jog --file /var/log/videos.log --select "_.vid < 5" --map _.type --map "_.split(' ')"
 [ [ 'compiling', 'video' ],
   [ 'compiling', 'video' ],
   [ 'compiling', 'video' ],
@@ -162,14 +162,14 @@ jog --file /var/log/videos.log --select "_.vid < 5" --map _.msg --map "_.split('
 ```
 $ jog --file my.log -f -c --select '_.level == "error"'
 { level: 'error',
-  msg: 'something broke',
+  type: 'something broke',
   timestamp: 1333943982669 }
 ```
 
   Display error messages within the last 10 seconds:
 
 ```
-$ jog -F my.log --level error --select "Date.now() - _.timestamp < 10000" --map _.msg
+$ jog -F my.log --level error --select "Date.now() - _.timestamp < 10000" --map _.type
 [ 'something broke', 'something broke', 'something broke' ]
 ```
 
