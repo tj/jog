@@ -48,7 +48,8 @@ program
   .option('-R, --redis', 'load from redis store')
   .option('-s, --select <fn>', 'use the given <fn> for filtering')
   .option('-m, --map <fn>', 'use the given <fn> for mapping')
-  .option('-c, --color', 'color the json output')
+  .option('-c, --color', 'color the output')
+  .option('-j, --json', 'output JSON (--color will not work)')
   .parse(process.argv);
 
 // determine store
@@ -120,7 +121,9 @@ stream.on('end', function(){
  */
 
 function output(obj) {
-  if (program.color) {
+  if (program.json) {
+    console.log(JSON.stringify(obj, null, 2));
+  } else if (program.color) {
     console.log(util.inspect(obj, false, 15, true));
   } else {
     console.log(obj);
