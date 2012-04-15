@@ -120,7 +120,8 @@ yields:
     -R, --redis         load from redis store
     -s, --select <fn>   use the given <fn> for filtering
     -m, --map <fn>      use the given <fn> for mapping
-    -c, --color         color the json output
+    -c, --color         color the output
+    -j, --json          output json (--color will not work)
   
   
 ```
