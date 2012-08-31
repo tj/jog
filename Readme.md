@@ -107,9 +107,9 @@ yields:
 ```
 
   Usage: jog [options]
-  
+
   Options:
-  
+
     -h, --help          output usage information
     -V, --version       output the version number
     -w, --within <ms>   filter events to within the given <ms>
@@ -120,10 +120,10 @@ yields:
     -R, --redis         load from redis store
     -s, --select <fn>   use the given <fn> for filtering
     -m, --map <fn>      use the given <fn> for mapping
+    -r, --reduce <fn>   use the given <fn> for reducing
     -c, --color         color the output
-    -j, --json          output json (--color will not work)
-  
-  
+    -j, --json          output JSON (--color will not work)
+
 ```
 
 ### Examples
