@@ -3,8 +3,7 @@
 var program = require('commander')
   , util = require('util')
   , ms = require('ms')
-  , jog = require('..')
-  , select;
+  , jog = require('..');
 
 // map functions
 
@@ -48,6 +47,7 @@ program
   .option('-R, --redis', 'load from redis store')
   .option('-s, --select <fn>', 'use the given <fn> for filtering')
   .option('-m, --map <fn>', 'use the given <fn> for mapping')
+  .option('-r, --reduce <fn>', 'use the given <fn> for reducing')
   .option('-c, --color', 'color the output')
   .option('-j, --json', 'output JSON (--color will not work)')
   .parse(process.argv);
@@ -74,6 +74,12 @@ if (program.within) {
   selects.push(new Function('_', 'return Date.now() - _.timestamp <= ' + program.within));
 }
 
+// --reduce
+
+if (program.reduce) {
+  var reduce = new Function('$, _', 'return ' + program.reduce);
+}
+
 // setup
 
 var log = jog(store)
@@ -86,6 +92,7 @@ var log = jog(store)
 stream.on('data', function(line){
   var ret;
 
+  // select
   if (selects.length) {
     ret = line;
     for (var i = 0, len = selects.length; i < len; ++i) {
@@ -98,6 +105,7 @@ stream.on('data', function(line){
     ret = line;
   }
 
+  // map
   if (undefined === ret) return;
   for (var i = 0, len = maps.length; i < len; ++i) {
     ret = maps[i](ret);
@@ -113,7 +121,9 @@ stream.on('data', function(line){
 // output results
 
 stream.on('end', function(){
-  ignoreEOF || output(results);
+  if (ignoreEOF) return;
+  if (reduce) results = results.reduce(reduce);
+  output(results);
 });
 
 /**
