@@ -2,10 +2,6 @@
 var Jog = require('../');
 
 describe('Jog', function(){
-  it('should expose .version', function(){
-    Jog.should.have.property('version');
-  })
-
   it('should expose .RedisStore', function(){
     Jog.should.have.property('RedisStore');
   })
