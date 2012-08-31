@@ -37,6 +37,19 @@ program.on('select', function(val){
   selects.push(new Function('_', 'return ' + val));
 });
 
+// examples
+
+program.on('--help', function(){
+  console.log('  Examples:');
+  console.log();
+  console.log('    # filter slow queries');
+  console.log('    $ jog --file query.log --select "_.duration > 300');
+  console.log();
+  console.log('    # total query durations');
+  console.log('    $ jog --file query.log --map _.duration --reduce "$ + _"');
+  console.log();
+});
+
 program
   .version(jog.version)
   .option('-w, --within <ms>', 'filter events to within the given <ms>', ms)
