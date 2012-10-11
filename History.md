@@ -1,4 +1,10 @@
 
+0.5.0 / 2012-10-11 
+==================
+
+  * add word support to `--map` and `--select`
+  * fix path.exists was moved to fs.exists
+
 0.4.0 / 2012-08-31 
 ==================
 
