@@ -16,7 +16,7 @@ var selects = [];
 // --map
 
 program.on('map', function(val){
-  if (/^\w+$/.test(val)) val = '_.' + val;
+  if (/^[\w.]+$/.test(val)) val = '_.' + val;
   maps.push(new Function('_', 'return ' + val));
 });
 
@@ -35,7 +35,7 @@ program.on('type', function(val){
 // --select
 
 program.on('select', function(val){
-  if (/^\w+$/.test(val)) val = '_.' + val;
+  if (/^[\w.]+$/.test(val)) val = '_.' + val;
   selects.push(new Function('_', 'return ' + val));
 });
 
