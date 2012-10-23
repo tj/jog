@@ -8,13 +8,13 @@
   , "bin": { "jog": "./bin/jog" }
   , "dependencies": {
       "debug": "*",
-      "redis": "0.8.1",
       "commander": "0.5.2",
       "ms": "0.1.0"
     }
   , "devDependencies": {
       "mocha": "*",
-      "should": "*"
+      "should": "*",
+      "redis": "0.8.1"
     }
   , "main": "index"
   , "engines": { "node": "*" }
