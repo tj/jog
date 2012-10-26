@@ -48,7 +48,7 @@ program.on('--help', function(){
   console.log('    $ jog --file query.log --select "_.duration > 300');
   console.log();
   console.log('    # total query durations');
-  console.log('    $ jog --file query.log --map _.duration --reduce "$ + _"');
+  console.log('    $ jog --file query.log --map duration --reduce "$ + _"');
   console.log();
 });
 
