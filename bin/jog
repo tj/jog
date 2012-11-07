@@ -65,6 +65,7 @@ program
   .option('-r, --reduce <fn>', 'use the given <fn> for reducing')
   .option('-c, --color', 'color the output')
   .option('-j, --json', 'output JSON (--color will not work)')
+  .option('--format <fmt>', 'output format string')
   .parse(process.argv);
 
 // determine store
@@ -93,6 +94,16 @@ if (program.within) {
 
 if (program.reduce) {
   var reduce = new Function('$, _', 'return ' + program.reduce);
+}
+
+// --format
+
+if (program.format) {
+  var format = '"' + program.format.replace(/(\.[.\w]+)/g, function(_, str){
+    return '" + _' + str + ' + "';
+  }) + '"';
+
+  format = new Function('_', 'return ' + format);
 }
 
 // setup
@@ -146,6 +157,13 @@ stream.on('end', function(){
  */
 
 function output(obj) {
+  if (format) {
+    obj = obj.map(format).forEach(function(str){
+      console.log(str);
+    });
+    return;
+  }
+
   if (program.json) {
     console.log(JSON.stringify(obj, null, 2));
   } else if (program.color) {
