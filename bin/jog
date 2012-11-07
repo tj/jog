@@ -50,6 +50,9 @@ program.on('--help', function(){
   console.log('    # total query durations');
   console.log('    $ jog --file query.log --map duration --reduce "$ + _"');
   console.log();
+  console.log('    # format requests');
+  console.log('    $ jog --file query.log --format ".method .path -> .status"');
+  console.log();
 });
 
 program
