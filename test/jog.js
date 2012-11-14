@@ -30,6 +30,21 @@ describe('Jog', function(){
       var log = new Jog(store);
       log.info('something happened');
     })
+
+    it('should handle error instances', function (done){
+      var err = new Error('BOOM')
+
+      var store = {
+        add: function(obj){
+          obj.error.should.equal(err.stack);
+          obj.x.should.equal('y');
+          done();
+        }
+      };
+
+      var log = new Jog(store);
+      log.error('something happened', { error: err, x: 'y' });
+    })
   })
 
   describe('#ns(obj)', function(){
