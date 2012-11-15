@@ -1,4 +1,10 @@
 
+0.7.0 / 2012-11-14 
+==================
+
+  * add `log.error(type, err)` support
+  * add `log.error(type, { error: err })` support
+
 0.6.0 / 2012-11-07 
 ==================
 
