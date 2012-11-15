@@ -36,14 +36,15 @@ describe('Jog', function(){
 
       var store = {
         add: function(obj){
-          obj.error.should.equal(err.stack);
-          obj.x.should.equal('y');
-          done();
+          obj.error.stack.should.equal(err.stack);
+          obj.error.message.should.equal(err.message);
         }
       };
 
       var log = new Jog(store);
-      log.error('something happened', { error: err, x: 'y' });
+      log.error('something happened', { error: err });
+      log.error('even worse', err);
+      done();
     })
   })
 
